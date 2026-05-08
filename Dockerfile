@@ -1,21 +1,22 @@
-FROM node:20
+# 🌟 改用 slim 版本，體積與記憶體佔用極小
+FROM node:20-slim
 
-# 1. 安裝系統內建的 Clustal Omega
-RUN apt-get update && apt-get install -y clustalo && rm -rf /var/lib/apt/lists/*
+# 安裝 clustalo 以及 slim 版缺少的基礎套件
+RUN apt-get update && apt-get install -y \
+    clustalo \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# 2. 安裝 Node 套件
 COPY package*.json ./
-RUN npm install
+# 加上 --production 減少不必要的開發工具安裝
+RUN npm install --production
 
-# 3. 複製所有檔案
 COPY . .
 
-# 4. 確保執行檔有執行權限
 RUN cp /usr/bin/clustalo /app/clustalo && chmod +x /app/clustalo
 
 EXPOSE 3000
 
-# 🌟 修改點：限制 Node.js 的記憶體 (Heap)，把剩下的 300 多 MB 留給作業系統和 clustalo
-CMD ["node", "--max-old-space-size=128", "server.js"]
+# 🌟 把 Node 的記憶體限制再降一點點，挪出更多空間給運算
+CMD ["node", "--max-old-space-size=96", "server.js"]
