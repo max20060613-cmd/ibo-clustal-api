@@ -28,7 +28,8 @@ app.post('/api/align', (req, res) => {
 
     // 使用 path.resolve 確保路徑絕對正確
     const binPath = path.resolve(__dirname, 'clustalo');
-    const command = `${binPath} --infile="${inputFile}" --outfile="${outputFile}" --outfmt=clustal --force`;
+    // 修改 server.js 中的 command 這一行
+    const command = `./clustalo --infile="${inputFile}" --outfile="${outputFile}" --outfmt=clustal --force`;
     console.log(`[Job ${jobId}] 正在 Render 雲端計算中...`);
 
     execSync(command);
