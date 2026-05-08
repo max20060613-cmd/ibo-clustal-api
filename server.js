@@ -26,7 +26,9 @@ app.post('/api/align', (req, res) => {
   try {
     fs.writeFileSync(inputFile, sequence);
 
-    const command = `${CLUSTAL_BIN} --infile="${inputFile}" --outfile="${outputFile}" --outfmt=clustal --force`;
+    // 使用 path.resolve 確保路徑絕對正確
+    const binPath = path.resolve(__dirname, 'clustalo');
+    const command = `${binPath} --infile="${inputFile}" --outfile="${outputFile}" --outfmt=clustal --force`;
     console.log(`[Job ${jobId}] 正在 Render 雲端計算中...`);
 
     execSync(command);
