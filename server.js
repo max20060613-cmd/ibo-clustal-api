@@ -26,7 +26,8 @@ app.post('/api/align', (req, res) => {
     console.log(`[Job ${jobId}] 接收成功，開始運算...`);
 
     // 🌟 在 Docker 環境中，直接呼叫 clustalo 即可
-    // 加上 --threads=1 限制 CPU 使用率，避免在免費伺服器上衝太高
+    // 加上 --memory-limit=200 限制 clustalo 運算時的記憶體
+    // 加上 --threads=1 避免多執行緒搶佔資源
     const command = `clustalo --infile="${inputFile}" --outfile="${outputFile}" --outfmt=clustal --force --threads=1`;
 
     // 2. 執行運算 (設定 10MB 緩衝區)
