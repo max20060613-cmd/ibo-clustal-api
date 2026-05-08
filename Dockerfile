@@ -12,10 +12,10 @@ RUN npm install
 # 3. 複製所有檔案
 COPY . .
 
-# 4. 🌟 關鍵修正：確保執行檔有執行權限
-# 我們把系統安裝好的 clustalo 覆蓋過去，並強制加上執行權限 (+x)
+# 4. 確保執行檔有執行權限
 RUN cp /usr/bin/clustalo /app/clustalo && chmod +x /app/clustalo
 
 EXPOSE 3000
 
-CMD ["node", "server.js"]
+# 🌟 修改點：限制 Node.js 的記憶體 (Heap)，把剩下的 300 多 MB 留給作業系統和 clustalo
+CMD ["node", "--max-old-space-size=128", "server.js"]
